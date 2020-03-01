@@ -10,7 +10,7 @@ Pod::Spec.new do |s|
   s.license        = package['license']
   s.author         = package['author']
   s.homepage       = package['homepage']
-  s.source         = { :git => 'https://github.com/ludo/react-native-torch' }
+  s.source         = { :git => 'https://github.com/liuminghui2017/react-native-torch.git' }
 
   s.requires_arc   = true
   s.platform       = :ios, '8.0'

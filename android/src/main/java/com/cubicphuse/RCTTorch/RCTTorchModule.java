@@ -34,14 +34,23 @@ public class RCTTorchModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void switchState(Boolean newState, Callback successCallback, Callback failureCallback) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            CameraManager cameraManager =
-                    (CameraManager) this.myReactContext.getSystemService(Context.CAMERA_SERVICE);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
-                String cameraId = cameraManager.getCameraIdList()[0];
-                cameraManager.setTorchMode(cameraId, newState);
-                successCallback.invoke(true);
+                //获取CameraManager
+                CameraManager mCameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+                //获取当前手机所有摄像头设备ID
+                String[] ids  = mCameraManager.getCameraIdList();
+                for (String id : ids) {
+                    CameraCharacteristics c = mCameraManager.getCameraCharacteristics(id);
+                    //查询该摄像头组件是否包含闪光灯
+                    Boolean flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+                    Integer lensFacing = c.get(CameraCharacteristics.LENS_FACING);
+                    if (flashAvailable != null && flashAvailable
+                            && lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
+                        //打开或关闭手电筒
+                        mCameraManager.setTorchMode(id, newState);
+                    }
+                }
             } catch (Exception e) {
                 String errorMessage = e.getMessage();
                 failureCallback.invoke("Error: " + errorMessage);

@@ -7,6 +7,7 @@ package com.cubicphuse.RCTTorch;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.os.Build;
 
@@ -37,7 +38,7 @@ public class RCTTorchModule extends ReactContextBaseJavaModule {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             try {
                 //获取CameraManager
-                CameraManager mCameraManager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
+                CameraManager mCameraManager = (CameraManager) this.myReactContext.getSystemService(Context.CAMERA_SERVICE);
                 //获取当前手机所有摄像头设备ID
                 String[] ids  = mCameraManager.getCameraIdList();
                 for (String id : ids) {
